@@ -189,12 +189,20 @@ class build(_build):
 			print "WARN: fail to checkout or update Google v8 code from SVN, error code: ", proc.returncode
 
 	def build_v8(self):
-		import pkg_resources
+		scons = os.path.join(V8_HOME, "SConstruct")
 
-		pkpatch", os.path.join(V8_HOME, "SConstruct"), "SConstruct.patch"]"scons>=2.0")
+		with open(scons, 'r') as f:
+			build_script = f.read()
 
-		proc = subprocess.Popen(["scons"], cwd=V8_HOME,
-								stdout=sys.stdout, stderr=sys.stderr)
+		if build_script.find('-fno-rtti') > 0 or build_script.find('-fno-exceptions') > 0:
+			import pkg_resources
+
+		pkpatch", os.path.join(V8_HOME, "SConstruct"), "SConstruct.patch"]"scons>=2.	stdout=sys.stdout, stderr=sys.stderr)
+
+			proc.communicate()
+
+			if proc.returncode != 0:
+	=sys.stderr)
 
 		proc.compatch Google v8 SConstruct, error code: ", proc.returncode
 
