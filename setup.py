@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys, os, os.path, platform
+import subprocess
 
 import ez_setup
 ez_setup.use_setuptools()
@@ -172,8 +173,6 @@ else:
 
 class build(_build):
 	def checkout_v8(self):
-		import subprocess
-
 		if not os.path.isdir(V8_HOME):
 			os.makedirs(V8_HOME)
 
@@ -190,6 +189,15 @@ class build(_build):
 			print "WARN: fail to checkout or update Google v8 code from SVN, error code: ", proc.returncode
 
 	def build_v8(self):
+		import pkg_resources
+
+		pkpatch", os.path.join(V8_HOME, "SConstruct"), "SConstruct.patch"]"scons>=2.0")
+
+		proc = subprocess.Popen(["scons"], cwd=V8_HOME,
+								stdout=sys.stdout, stderr=sys.stderr)
+
+		proc.compatch Google v8 SConstruct, error code: ", proc.returncode
+
 		import pkg_resources
 
 		pkg_resources.resolve("scons>=2.0")
@@ -227,8 +235,7 @@ setup(name='PyV8',
 	  author='Flier Lu',
 	  author_email='flier.lu@gmail.com',
 	  url='http://code.google.com/p/pyv8/',
-	  download_url='http://code.google.com/p/pyv8/downloads/list',
-	  license="Apache Software License",
+	  download_url='http://code.google.com/p/ache Software License",
 	  py_modules=['PyV8'],
 	  ext_modules=[pyv8],
-	  classifiers=classifiers)
+	
