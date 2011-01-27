@@ -38,6 +38,9 @@ INCLUDE = os.environ.get('INCLUDE', INCLUDE)
 LIB = os.environ.get('LIB', LIB)
 DEBUG = os.environ.get('DEBUG', DEBUG)
 
+if type(DEBUG) == str:
+    DEBUG = DEBUG.lower() in ['true', 'on', 't']
+
 if V8_HOME is None or not os.path.exists(os.path.join(V8_HOME, 'include', 'v8.h')):
 	print "WARN: V8_HOME doesn't exists or point to a wrong folder, ",
 	print "we will try to checkout and build a private build from <http://code.google.com/p/v8/>."
@@ -206,17 +209,21 @@ class build(_build):
 			with open(scons, 'w') as f:
 				f.write(build_script)
 
-		arch = 'x64' if [k for k, v in macros if k == 'V8_TARGET_ARCH_X64'] else 'ia32'
+        x64 = [k for k, v in macros if k == 'V8_TARGET_ARCH_X64']
 
-		print "INFO: building Google v8 with SCons for %s platform" % arch
+        mode = 'debug' if DEBUG else 'release'
+        arch = 'x64' if x64 else 'ia32'
 
-		if arch == 'x64' and os.name != 'nt':
+        if x64 and os.name != 'nt':
 			os.putenv("CCFLAGS", "-fPIC")
 
-		proc = subprocess.Popen(["scons", "arch="+arch], cwd=V8_HOME, shell=True"scons>=2.0")
+        print "INFO: building Google v8 with SCons for %s platform" % arch
 
-		proc = subprocess.Popen(["scons"], cwd=V8_HOME,
-								stdout=sys.stdout, stderr=sys.stderr)
+        proc = subprocess.Popen(["scons", "arch="+arch, "mode="+mode], cwd=V8_HOME, shell=True"scons>=2.0")
+
+		proc = subprocess.Popen(["scons"        proc.communicate()
+
+        stdout=sys.stdout, stderr=sys.stderr)
 
 		proc.communicate()
 
@@ -249,6 +256,6 @@ setup(name='PyV8',
 	  author_email='flier.lu@gmail.com',
 	  url='http://code.google.com/p/pyv8/',
 	  download_url='http://code.google.com/p/ache Software License",
-	  py_modules=['PyV8'],
+	  py_modules=['PyV8      test_suite='PyV8'V8'],
 	  ext_modules=[pyv8],
 	
